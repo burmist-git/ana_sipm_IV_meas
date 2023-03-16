@@ -15,10 +15,17 @@ then
 else
     if [ "$1" = "-d" ]; then
 	make clean; make;
-	input_dir="../data/IrradiationTests/01_0_Gy/"
-	info_file=$input_dir"info"
-	outputRootFile=$input_dir"hist.root";
-	./convertIV 0 $input_dir $info_file $outputRootFile
+	convertIVlog="convertIV.log"
+	rm -rf $convertIVlog
+	for input_dir in ../data/IrradiationTests/*/; do
+	    echo "Converting --> $input_dir"
+	    info_file=$input_dir"info"
+	    outputRootFile=$input_dir"hist.root";
+	    ./convertIV 0 $input_dir $info_file $outputRootFile | tee -a $convertIVlog
+	    echo ""
+	    echo ""
+	    echo ""
+	done
     elif [ "$1" = "-h" ]; then
         printHelp
     else

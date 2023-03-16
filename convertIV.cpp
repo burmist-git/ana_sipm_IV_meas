@@ -47,9 +47,6 @@ int main(int argc, char *argv[]){
       std::cout<<"  ERROR ---> file "<<outputRootFile.Data()<<" is zombi"<<std::endl;
       assert(0);
     }
-    else {
-      std::cout<<"  Output TGrpah file ---> "<<outputRootFile.Data()<<std::endl;
-    }
     for(unsigned int i = 0; i < info_s.filename.size(); i++){
     //for(unsigned int i = 0; i < 1; i++){
       TString in_file_name_full = input_dir; in_file_name_full += "/";
@@ -67,38 +64,8 @@ int main(int argc, char *argv[]){
       gr->Write();
       gr->Delete();
     }
-
-    /*    
-    ////////////////
-    for(Int_t i = 0;i<numberOfWaveformsToSim;i++){
-      //std::cout<<i<<std::endl;
-      TGraph *gr_wf = new TGraph();
-      TGraph *gr_wf_sig = new TGraph();
-      TGraph *gr_wf_sig_only = new TGraph();
-      ////////////////
-      char buffer [5];
-      sprintf(buffer ,"%04d", i);
-      TString wf_ID = buffer;
-      TString gr_wf_name_title = "gr_wf_"; gr_wf_name_title += wf_ID;
-      TString gr_wf_sig_name_title = "gr_wf_sig_"; gr_wf_sig_name_title += wf_ID;
-      TString gr_wf_sig_only_name_title = "gr_wf_sig_only_"; gr_wf_sig_only_name_title += wf_ID;
-      ////////////////
-      gr_wf->SetTitle(gr_wf_name_title.Data());
-      gr_wf->SetName(gr_wf_name_title.Data());
-      gr_wf_sig->SetTitle(gr_wf_sig_name_title.Data());
-      gr_wf_sig->SetName(gr_wf_sig_name_title.Data());
-      gr_wf_sig_only->SetTitle(gr_wf_sig_only_name_title.Data());
-      gr_wf_sig_only->SetName(gr_wf_sig_only_name_title.Data());
-      wf->gen_WF( gr_wf, gr_wf_sig, gr_wf_sig_only, n_sig_pe);
-      gr_wf->Write();
-      gr_wf_sig->Write();
-      gr_wf_sig_only->Write();
-    }
-    //
-    wf->getTemplate()->Write();
-    //
-    */
     rootFile->Close();
+    std::cout<<"  Output TGrpah file ---> "<<outputRootFile.Data()<<std::endl;
   }
   else{
     std::cout<<"  runID [1] = 0                "<<std::endl
@@ -120,7 +87,7 @@ int main(int argc, char *argv[]){
 //4.0000E+0       99.6221E-12     0.0000E+0       0.0000E+0
 //6.0000E+0       114.6803E-12    0.0000E+0       0.0000E+0
 void read_K6487(TString fileName, TGraphErrors *gr){
-  std::cout<<fileName<<std::endl;
+  std::cout<<" Reading --> "<<fileName<<std::endl;
   std::ifstream myfile(fileName.Data());
   std::string mot;
   Double_t Voltage;
@@ -151,6 +118,24 @@ void read_K6487(TString fileName, TGraphErrors *gr){
 //1.5000E+0       -6.2948E-10
 //2.0000E+0       -3.2374E-10
 void read_K2400(TString fileName, TGraphErrors *gr){
+  std::cout<<" Reading --> "<<fileName<<std::endl;
+  std::ifstream myfile(fileName.Data());
+  Double_t Voltage;
+  Double_t Current;
+  Double_t Voltage_err;
+  Double_t Current_err;
+  if(myfile.is_open()){
+    while(myfile>>Voltage>>Current){
+      Int_t n = gr->GetN();
+      gr->SetPoint(n,Voltage, Current);
+      //std::cout<<Voltage<<Voltage<<std::endl
+      //       <<Current<<Current<<std::endl;
+      Voltage_err = Voltage/100.0 + 0.001;
+      Current_err = Current/10.0 + 1.0e-13;
+      gr->SetPointError(n,Voltage_err,Current_err);
+    }
+    myfile.close();
+  }
 }
 
 /*
