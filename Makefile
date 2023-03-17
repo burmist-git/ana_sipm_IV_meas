@@ -45,9 +45,9 @@ obj/libconvertIV.so: obj/convertIV.o
 convertIV: convertIV.cpp infoStr.hh
 	$(CXX) -o $@ $^ $(CXXFLAGS)
 
-install: makedir obj/libwfsim.so
+install: makedir obj/libconvertIV.so
 	mkdir -p $(INSTALLDIR);
-	cp $(OUTLIB)libwfsim.so $(INSTALLDIR)libwfsim.so
+	cp $(OUTLIB)libconvertIV.so $(INSTALLDIR)libconvertIV.so
 	cp src/*.hh $(INSTALLDIR).
 
 cleaninstall:
