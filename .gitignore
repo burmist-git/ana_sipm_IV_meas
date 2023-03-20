@@ -2,3 +2,5 @@
 .*~
 convertIV
 convertIV.log
+*.pdf
+*.root

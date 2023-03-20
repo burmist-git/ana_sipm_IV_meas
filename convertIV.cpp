@@ -21,6 +21,8 @@
 
 void read_K6487(TString fileName, TGraphErrors *gr);
 void read_K2400(TString fileName, TGraphErrors *gr);
+Double_t get_volt_err(Double_t Voltage);
+Double_t get_curr_err(Double_t Current);
 
 int main(int argc, char *argv[]){
   //
@@ -104,8 +106,10 @@ void read_K6487(TString fileName, TGraphErrors *gr){
       gr->SetPoint(n,Voltage, Current);
       //std::cout<<Voltage<<Voltage<<std::endl
       //       <<Current<<Current<<std::endl;
-      Voltage_err = Voltage/100.0 + 0.001;
-      Current_err = Current/10.0 + 1.0e-13;
+      //Voltage_err = Voltage/100.0 + 0.001;
+      //Current_err = Current/10.0 + 1.0e-13;
+      Voltage_err = get_volt_err(Voltage);
+      Current_err = get_curr_err(Current);
       gr->SetPointError(n,Voltage_err,Current_err);
     }
     myfile.close();
@@ -130,37 +134,20 @@ void read_K2400(TString fileName, TGraphErrors *gr){
       gr->SetPoint(n,Voltage, Current);
       //std::cout<<Voltage<<Voltage<<std::endl
       //       <<Current<<Current<<std::endl;
-      Voltage_err = Voltage/100.0 + 0.001;
-      Current_err = Current/10.0 + 1.0e-13;
+      //Voltage_err = Voltage/100.0 + 0.001;
+      //Current_err = Current/10.0 + 1.0e-13;
+      Voltage_err = get_volt_err(Voltage);
+      Current_err = get_curr_err(Current);
       gr->SetPointError(n,Voltage_err,Current_err);
     }
     myfile.close();
   }
 }
 
-/*
-void readDatTrkFile(TString fileName, Double_t &theta, Double_t &phi, 
-                    Double_t &x_int, Double_t &y_int, Double_t &z_int, 
-                    Double_t &xe0, Double_t &ye0, Double_t &ze0, 
-                    Double_t &distToEarth, Double_t &distToTerzina, Double_t &angleTrzinaTrk, Double_t &nphotons_per_m2){
-  x_int = -999.0;
-  y_int = -999.0;
-  z_int = -999.0;
-  xe0 = -999.0;
-  ye0 = -999.0;
-  ze0 = -999.0;
-  distToEarth = -999.0;
-  distToTerzina = -999.0;
-  angleTrzinaTrk = -999.0;
-  nphotons_per_m2 = -999.0;
-  //
-  std::ifstream myfile(fileName.Data());
-  std::string mot;
-  if(myfile.is_open()){
-    for(Int_t i = 0;i<12;i++)
-      myfile>>mot;
-    myfile>>theta>>phi>>x_int>>y_int>>z_int>>xe0>>ye0>>ze0>>distToEarth>>distToTerzina>>angleTrzinaTrk>>nphotons_per_m2;
-    myfile.close();
-  }
+Double_t get_volt_err(Double_t Voltage){
+  return 0.01;
 }
-*/
+
+Double_t get_curr_err(Double_t Current){
+  return Current/10.0 + 1.0e-9;
+}

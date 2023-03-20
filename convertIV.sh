@@ -55,7 +55,7 @@ else
 	make clean; make;
 	convertIVlog="convertIV.log"
 	rm -rf $convertIVlog
-	for input_dir in ../data/IrradiationTests/*/; do
+	for input_dir in ../data/IrradiationTests/*_Gy*/; do
 	    echo "Converting --> $input_dir"
 	    info_file=$input_dir"info"
 	    outputRootFile=$input_dir"hist.root";
@@ -65,9 +65,12 @@ else
 	    echo ""
 	done
     elif [ "$1" = "-info" ]; then
-	for input_dir in ../data/IrradiationTests/*_Gy/; do
-	    gen_info $input_dir
-	done
+	#for input_dir in ../data/IrradiationTests/*_Gy*/; do
+	#gen_info $input_dir
+	#done
+	echo "generated"
+    elif [ "$1" = "-info_06_5_Gy_ND" ]; then
+	gen_info ../data/IrradiationTests/06_5_Gy_ND/
     elif [ "$1" = "-h" ]; then
         printHelp
     else
